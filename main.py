@@ -1,14 +1,19 @@
 import requests
 from bs4 import BeautifulSoup
 
-url = 'https://scrapingclub.com/exercise/list_basic/?page=1'
+for count in range(1, 8):
 
-response = requests.get(url)
+    url = f'https://scrapingclub.com/exercise/list_basic/?page={count}'
 
-soup = BeautifulSoup(response.text, 'lxml')
+    response = requests.get(url)
 
-data = soup.find('div', class_='col-lg-4 col-md-6 mb-4')
+    soup = BeautifulSoup(response.text, 'lxml')
 
-name = data.find('h4', class_='card-title').text.replace('\n', '')
-price = data.find('h5').text
-url_img = 'https://scrapingclub.com' + data.find('img', class_='card-img-top img-fluid').get('src')
+    data = soup.find_all('div', class_='col-lg-4 col-md-6 mb-4')
+
+    for i in data:
+        name = i.find('h4', class_='card-title').text.replace('\n', '')
+        price = i.find('h5').text
+        url_img = 'https://scrapingclub.com' + i.find('img', class_='card-img-top img-fluid').get('src')
+
+    print(name + '\n', price + '\n', url_img + '\n')
